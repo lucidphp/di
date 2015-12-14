@@ -9,7 +9,9 @@
  * that was distributed with this package.
  */
 
-namespace Lucid\DI;
+namespace Lucid\DI\Definition;
+
+use Lucid\DI\Scope;
 
 /**
  * @interface FactoryInterface
@@ -31,13 +33,13 @@ class Factory extends Service implements FactoryInterface
      *
      * @param string $class
      * @param string $method
-     * @param boolean $static
+     * @param bool $static
      * @param string $scope
      */
-    public function __construct($class, $method, $static = true, $scope = Scope::SINGLETON)
+    public function __construct($class, $method, $static = true, Scope $scope = null)
     {
         $this->factoryMethod = $method;
-        $this->isStatic = (bool)$static;
+        $this->isStatic      = (bool)$static;
 
         parent::__construct($class, [], $scope);
     }
@@ -56,15 +58,5 @@ class Factory extends Service implements FactoryInterface
     public function isStatic()
     {
         return $this->isStatic;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCallers()
-    {
-        $callers = parent::getCallers();
-
-        return $callers;
     }
 }

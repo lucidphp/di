@@ -9,10 +9,10 @@
  * that was distributed with this package.
  */
 
-namespace Lucid\DI;
+namespace Lucid\DI\Definition;
 
-use Lucid\DI\Reference\CallerReferenceInterface;
-use Lucid\DI\Reference\ServiceReferenceInterface;
+use Lucid\DI\Reference\CallerInterface as CallerReferenceInterface;
+use Lucid\DI\Reference\ServiceInterface as ServiceReferenceInterface;
 
 /**
  * @interface ServiceInterface
@@ -100,7 +100,7 @@ interface ServiceInterface
      *
      * @param mixed $scope
      *
-     * @return boolean
+     * @return bool
      */
     public function hasScope($scope);
 
@@ -108,9 +108,16 @@ interface ServiceInterface
      * The service definition is an abstract blueprint and cannot be
      * initialized.
      *
-     * @return boolean
+     * @return bool
      */
     public function isBlueprint();
+
+    /**
+     * hasBluePrint
+     *
+     * @return bool
+     */
+    public function hasBluePrint();
 
     /**
      * The service reference used for blueprinting this service.
@@ -188,7 +195,7 @@ interface ServiceInterface
      * Marks this services as injected into the DIC, and therefor not
      * createable by the DIC.
      *
-     * @param boolean $injected
+     * @param bool $injected
      *
      * @return void
      */
@@ -221,4 +228,11 @@ interface ServiceInterface
      * @return void
      */
     public function isBoundTo($binding);
+
+    /**
+     * Checks if this service is bound to any service.
+     *
+     * @return bool
+     */
+    public function isBound();
 }

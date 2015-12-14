@@ -9,9 +9,11 @@
  * that was distributed with this package.
  */
 
-namespace Lucid\DI;
+namespace Lucid\DI\Definition;
 
-use Lucid\DI\Reference\CallerReferenceInterface;
+use Lucid\DI\Scope;
+use Lucid\DI\AttributeableInterface;
+use Lucid\DI\Reference\CallerInterface as CallerReferenceInterface;
 use Lucid\DI\Reference\ServiceInterface as ServiceReferenceInterface;
 
 /**
@@ -62,15 +64,15 @@ class Service implements ServiceInterface, AttributeableInterface
      * @param array  $arguments
      * @param string $scope
      */
-    public function __construct($class = null, array $arguments = [], $scope = Scope::SINGLETON)
+    public function __construct($class = null, array $arguments = [], Scope $scope = null)
     {
-        $this->class = $class;
-        $this->arguments = $arguments;
-        $this->scope = $scope;
+        $this->class      = $class;
+        $this->arguments  = $arguments;
+        $this->scope      = $scope ?: new Scope;
         $this->attributes = [];
-        $this->bindings = [];
-        $this->callers = [];
-        $this->setters = [];
+        $this->bindings   = [];
+        $this->callers    = [];
+        $this->setters    = [];
     }
 
     /**
@@ -254,9 +256,7 @@ class Service implements ServiceInterface, AttributeableInterface
     {
         $this->bindings = [];
 
-        foreach ($bindings as $binding) {
-            $this->addBinding($binding);
-        }
+        array_map([$this, 'addBinding'], $bindings);
     }
 
     /**
@@ -290,9 +290,7 @@ class Service implements ServiceInterface, AttributeableInterface
     {
         $this->callers = [];
 
-        foreach ($callers as $caller) {
-            $this->calls($caller);
-        }
+        array_map([$this, 'calls'], $callers);
     }
 
     /**
@@ -326,10 +324,10 @@ class Service implements ServiceInterface, AttributeableInterface
     {
         $this->setters = [];
 
-        foreach ($setters as $setter) {
+        array_map(function ($setter) {
             list($method, $args) = array_pad($setter, 2, []);
             $this->sets($method, $args);
-        }
+        }, $setters);
     }
 
     /**
@@ -358,17 +356,11 @@ class Service implements ServiceInterface, AttributeableInterface
      */
     private function mergeBlueprintArguments(ServiceInterface $bp)
     {
-        if (!(bool)$this->getArguments()) {
+        if (!(bool)($args = $this->getArguments())) {
             return $bp->getArguments();
         }
 
-        $args = $bg->getArguments();
-
-        foreach ($this->getArguments() as $key => $argument) {
-            $args[$key] = $argument;
-        }
-
-        return $args;
+        return array_merge($bp->getArguments(), $args);
     }
 
     /**
@@ -377,7 +369,7 @@ class Service implements ServiceInterface, AttributeableInterface
      * @param mixed $index
      * @param array $args
      *
-     * @return boolean
+     * @return bool
      */
     private function inRange($index, array $args)
     {

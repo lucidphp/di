@@ -9,28 +9,24 @@
  * that was distributed with this package.
  */
 
-namespace Lucid\DI;
+namespace Lucid\DI\Tests\Parameter;
+
+use Lucid\DI\Parameter\Value;
 
 /**
- * @interface FactoryInterface
+ * @class ValueTest
  *
  * @package Lucid\DI
  * @version $Id$
  * @author iwyg <mail@thomas-appel.com>
  */
-interface FactoryInterface
+class ValueTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * getMethod
-     *
-     * @return string|calleble
-     */
-    public function getFactoryMethod();
+    /** @test */
+    public function itShouldBeStringable()
+    {
+        $v = new Value(10);
 
-    /**
-     * isStatic
-     *
-     * @return boolean
-     */
-    public function isStatic();
+        $this->assertSame('10', (string)$v);
+    }
 }

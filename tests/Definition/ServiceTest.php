@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This File is part of the Lucid\DI\Tests package
+ * This File is part of the Lucid\DI package
  *
  * (c) iwyg <mail@thomas-appel.com>
  *
@@ -9,15 +9,15 @@
  * that was distributed with this package.
  */
 
-namespace Lucid\DI\Tests;
+namespace Lucid\DI\Tests\Definition;
 
-use Lucid\DI\Service;
 use Lucid\DI\Scope;
+use Lucid\DI\Definition\Service;
 
 /**
  * @class ServiceTest
  *
- * @package Lucid\DI\Tests
+ * @package Lucid\DI
  * @version $Id$
  * @author iwyg <mail@thomas-appel.com>
  */
@@ -29,7 +29,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
         $s = new Service($class = 'ServiceClass');
         $this->assertSame($class, $s->getClass());
 
-        $s->setClass($class = 'Foo');
+        $s->setClass($class = 'Foo\Bar\ServiceClass');
         $this->assertSame($class, $s->getClass());
     }
 
@@ -124,8 +124,8 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($s->isBluePrint());
     }
 
-    protected function mockCaller()
+    private function mockCaller()
     {
-        return $this->getMock('Lucid\DI\Reference\CallerReferenceInterface');
+        return $this->getMockbuilder('Lucid\DI\Reference\CallerInterface')->disableOriginalConstructor()->getMock();
     }
 }

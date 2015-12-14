@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This File is part of the Lucid\DI\Loader package
+ * This File is part of the Lucid\DI\Tests\Stubs package
  *
  * (c) iwyg <mail@thomas-appel.com>
  *
@@ -9,19 +9,17 @@
  * that was distributed with this package.
  */
 
-namespace Lucid\DI\Loader;
+namespace Lucid\DI\Tests\Stubs;
+
+use Lucid\DI\AbstractProvider;
 
 /**
- * @class XmlLoader
+ * @class Provider
  *
- * @package Lucid\DI\Loader
+ * @package Lucid\DI\Tests\Stubs
  * @version $Id$
  * @author iwyg <mail@thomas-appel.com>
  */
-class XmlLoader extends DicLoader
+class Provider extends AbstractProvider
 {
-    protected function doLoad($file)
-    {
-
-    }
 }
